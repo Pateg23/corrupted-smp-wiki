@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Corrupted SMP CMS</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',sans-serif;background:#0a0a0f;color:#e2e8f0;min-height:100vh}
+::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:#0a0a0f}::-webkit-scrollbar-thumb{background:#333;border-radius:3px}
+.login{max-width:360px;margin:12vh auto;padding:2rem;background:#12121a;border:1px solid #2a2a3a;border-radius:14px;text-align:center}
+.login h2{color:#c084fc;margin-bottom:.3rem;font-size:1.3rem}
+.login p{font-size:.68rem;color:#6b7280;margin-bottom:1.2rem}
+.fg{margin-bottom:.7rem;text-align:left}
+.fg label{display:block;font-size:.68rem;color:#94a3b8;margin-bottom:.2rem;font-weight:600;text-transform:uppercase;letter-spacing:.4px}
+.fg input,.fg textarea,.fg select{width:100%;padding:.5rem .7rem;background:#1a1a25;border:1px solid #2a2a3a;border-radius:7px;color:#e2e8f0;font-size:.82rem;font-family:inherit;outline:none;transition:border .2s}
+.fg input:focus,.fg textarea:focus{border-color:#9333ea}
+textarea{resize:vertical;min-height:50px}
+.btn{padding:.5rem .9rem;border:none;border-radius:7px;font-size:.75rem;font-weight:600;cursor:pointer;font-family:inherit;transition:all .15s;display:inline-flex;align-items:center;gap:.35rem}
+.btn-p{background:linear-gradient(135deg,#9333ea,#7c3aed);color:#fff}.btn-p:hover{filter:brightness(1.15)}
+.btn-g{background:#059669;color:#fff}.btn-r{background:#dc2626;color:#fff}
+.btn-o{background:#d97706;color:#fff}.btn-b{background:#3b82f6;color:#fff}
+.btn-a{background:#1a1a25;color:#94a3b8;border:1px solid #2a2a3a}.btn-a:hover{background:#2a2a3a;color:#e2e8f0}
+.btn-sm{padding:.3rem .55rem;font-size:.68rem}
+.topbar{background:#0e0e16;border-bottom:1px solid #1e1e2e;padding:.6rem 1rem;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100;flex-wrap:wrap;gap:.4rem}
+.topbar h1{font-size:.95rem;color:#c084fc}
+.topbar .actions{display:flex;gap:.4rem;flex-wrap:wrap;align-items:center}
+.badge{font-size:.6rem;padding:.2rem .45rem;border-radius:5px;background:#1a1a25;color:#6b7280}
+.badge.ok{color:#34d399;background:#05966918}
+.sidebar{position:fixed;left:0;top:50px;bottom:0;width:160px;background:#0e0e16;border-right:1px solid #1e1e2e;padding:.7rem 0;overflow-y:auto;z-index:50}
+.sidebar button{display:flex;align-items:center;gap:.45rem;width:100%;padding:.5rem .8rem;background:none;border:none;color:#94a3b8;font-size:.76rem;text-align:left;cursor:pointer;font-family:inherit;border-left:3px solid transparent;transition:all .12s}
+.sidebar button:hover{background:#1a1a25;color:#e2e8f0}
+.sidebar button.active{background:#1a1a2560;color:#c084fc;border-left-color:#9333ea;font-weight:600}
+.sidebar .sep{height:1px;background:#1e1e2e;margin:.4rem .8rem}
+.main{margin-left:160px;padding:1rem;max-width:1100px}
+.st{font-size:1.1rem;font-weight:700;margin-bottom:.8rem;color:#c084fc}
+.card{background:#12121a;border:1px solid #1e1e2e;border-radius:9px;padding:.8rem;margin-bottom:.8rem}
+.entry{background:#0d0d14;border:1px solid #1e1e2e;border-radius:9px;padding:.7rem;margin-bottom:.5rem}
+.entry:hover{border-color:#333}
+.eh{display:flex;justify-content:space-between;align-items:center;margin-bottom:.4rem}
+.eh h4{font-size:.8rem;color:#e2e8f0}
+.ea{display:flex;gap:.2rem;flex-shrink:0}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:.5rem}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.5rem}
+.craft-box{background:#1a1a25;border-radius:7px;padding:.5rem;margin-top:.4rem}
+.craft-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:3px;max-width:200px}
+.craft-slot{position:relative;background:#0d0d14;border:2px solid #2a2a3a;border-radius:6px;width:60px;height:60px;display:flex;align-items:center;justify-content:center;cursor:pointer;overflow:hidden;transition:all .15s}
+.craft-slot:hover{border-color:#9333ea}
+.craft-slot img{width:48px;height:48px;object-fit:contain}
+.craft-slot .ph{font-size:.6rem;color:#555}
+.add-btn{background:#1a1a25;border:1px dashed #2a2a3a;color:#94a3b8;padding:.45rem;border-radius:7px;cursor:pointer;font-size:.72rem;width:100%;margin-top:.4rem;font-family:inherit}
+.add-btn:hover{border-color:#9333ea;color:#c084fc}
+.tag{display:inline-flex;align-items:center;gap:.2rem;padding:.15rem .4rem;border-radius:4px;font-size:.65rem;margin:.15rem;background:#0d0d14;border:1px solid #1e1e2e;color:#94a3b8;cursor:pointer}
+.tag.rare{border-color:#fbbf2440;color:#fbbf24}
+.tag .x{opacity:.5;font-size:.6rem}.tag .x:hover{opacity:1;color:#ef4444}
+.toast{position:fixed;bottom:2rem;right:2rem;padding:.6rem 1rem;border-radius:9px;font-size:.78rem;z-index:9999;animation:su .3s ease;max-width:90vw}
+@keyframes su{from{transform:translateY(16px);opacity:0}to{transform:none;opacity:1}}
+.toast.s{background:#059669;color:#fff}.toast.e{background:#dc2626;color:#fff}.toast.i{background:#9333ea;color:#fff}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:10000;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(3px)}
+.modal{background:#12121a;border:1px solid #2a2a3a;border-radius:14px;padding:1.2rem;max-width:700px;width:92vw;max-height:85vh;overflow-y:auto}
+.modal h3{color:#c084fc;margin-bottom:.7rem}
+.modal-acts{display:flex;gap:.4rem;margin-top:1rem;justify-content:flex-end}
+.img-picker{position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:11000;display:flex;align-items:center;justify-content:center}
+.img-picker-inner{background:#12121a;border:1px solid #2a2a3a;border-radius:14px;padding:1.2rem;max-width:500px;width:90vw;max-height:70vh;overflow-y:auto}
+.img-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(70px,1fr));gap:.4rem}
+.img-opt{background:#0d0d14;border:2px solid #1e1e2e;border-radius:6px;padding:.3rem;cursor:pointer;text-align:center}
+.img-opt:hover{border-color:#9333ea}
+.img-opt img{width:100%;aspect-ratio:1;object-fit:contain;border-radius:3px}
+.img-opt .nm{font-size:.5rem;color:#6b7280;margin-top:2px;word-break:break-all;max-height:2.2em;overflow:hidden}
+.upload-zone{border:2px dashed #2a2a3a;border-radius:9px;padding:1.5rem;text-align:center;cursor:pointer;transition:all .15s}
+.upload-zone:hover{border-color:#9333ea;background:#9333ea08}
+@media(max-width:768px){.sidebar{display:none}.main{margin-left:0}.g2,.g3{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div id="loginScreen"><div class="login">
+<h2>⚔️ Corrupted SMP</h2>
+<p>Wiki Content Management System</p>
+<div class="fg"><label>Password</label><input type="password" id="pwInput" placeholder="Enter password" onkeydown="if(event.key==='Enter')doLogin()"></div>
+<button class="btn btn-p" style="width:100%;justify-content:center" onclick="doLogin()">Login</button>
+</div></div>
+
+<div id="app" style="display:none">
+<div class="topbar"><h1>⚔️ CMS</h1><div class="actions">
+<span id="statusBadge" class="badge">Offline</span>
+<button class="btn btn-g btn-sm" onclick="doSave()">💾 Save</button>
+<button class="btn btn-b btn-sm" onclick="doGenerate()">🔨 Generate</button>
+<button class="btn btn-o btn-sm" onclick="doDeploy()">🚀 Deploy</button>
+<button class="btn btn-a btn-sm" onclick="showBackups()">📋 Backups</button>
+<button class="btn btn-a btn-sm" onclick="window.open('/','_blank')">👁️ Preview</button>
+<button class="btn btn-a btn-sm" onclick="logout()">Logout</button>
+</div></div>
+<nav class="sidebar">
+<button class="active" onclick="sw('hero',this)">🏠 Hero</button>
+<button onclick="sw('ranks',this)">👑 Ranks</button>
+<button onclick="sw('weapons',this)">⚔️ Weapons</button>
+<button onclick="sw('crates',this)">📦 Crates</button>
+<button onclick="sw('items',this)">🔮 Items</button>
+<button onclick="sw('systems',this)">⚙️ Systems</button>
+<div class="sep"></div>
+<button onclick="sw('images',this)">🖼️ Images</button>
+</nav>
+<div class="main"><div id="status"></div><div id="content"></div></div>
+</div>
+
+<script>
+var PW='Acegotaura',C={},sec='hero',IMGS=[],sessionToken=localStorage.getItem('cms_token')||'';
+
+function toast(m,t){t=t||'i';var e=document.createElement('div');e.className='toast '+t;e.textContent=m;document.body.appendChild(e);setTimeout(function(){e.remove()},3500)}
+function setStatus(m,t){document.getElementById('status').innerHTML=m?'<div class="card" style="padding:.4rem .7rem;margin-bottom:.7rem;border-color:'+(t==='ok'?'#05966940':t==='err'?'#dc262640':'#1e1e2e')+'"><span style="font-size:.72rem;color:'+(t==='ok'?'#34d399':t==='err'?'#f87171':'#94a3b8')+'">'+m+'</span></div>':''}
+function esc(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+function splitL(v){return v.split(/[\n,]+/).map(function(s){return s.trim()}).filter(Boolean)}
+function deepCopy(o){return JSON.parse(JSON.stringify(o))}
+
+function api(extra){var h={'Content-Type':'application/json'};if(sessionToken)h['X-Session-Token']=sessionToken;if(extra)for(var k in extra)h[k]=extra[k];return h}
+function apiCall(url,opts){opts=opts||{};opts.headers=api(opts.headers);return fetch(url,opts).then(function(r){return r.json()}).then(function(d){if(d.error)throw new Error(d.error);return d})}
+function logout(){sessionToken='';localStorage.removeItem('cms_token');location.reload()}
+
+function doLogin(){
+  var pw=document.getElementById('pwInput').value;
+  if(!pw){toast('Enter password','e');return}
+  fetch('/api/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({password:pw})})
+  .then(function(r){return r.json()}).then(function(d){
+    if(d.error){toast(d.error,'e');return}
+    sessionToken=d.token;localStorage.setItem('cms_token',sessionToken);
+    document.getElementById('loginScreen').style.display='none';
+    document.getElementById('app').style.display='block';loadData();
+  }).catch(function(){toast('Login failed','e')});
+}
+
+checkSession().then(function(v){if(v){document.getElementById('loginScreen').style.display='none';document.getElementById('app').style.display='block';loadData()}});
+function checkSession(){if(!sessionToken)return Promise.resolve(false);return fetch('/api/session',{headers:{'X-Session-Token':sessionToken}}).then(function(r){return r.json()}).then(function(d){return d.valid===true}).catch(function(){return false})}
+
+function loadData(){setStatus('Loading...');apiCall('/api/content').then(function(d){C=d;return apiCall('/api/images')}).then(function(d){IMGS=d;render();setStatus('');document.getElementById('statusBadge').className='badge ok';document.getElementById('statusBadge').textContent='Connected'}).catch(function(e){setStatus('Error: '+e.message,'err')})}
+
+function render(){var el=document.getElementById('content');if(sec==='hero')rHero(el);else if(sec==='ranks')rRanks(el);else if(sec==='weapons')rWeapons(el);else if(sec==='crates')rCrates(el);else if(sec==='items')rItems(el);else if(sec==='systems')rSystems(el);else if(sec==='images')rImages(el)}
+
+function rHero(el){
+  var h=C.hero||{};
+  el.innerHTML='<div class="st">🏠 Hero</div><div class="card">'+
+    '<div class="fg"><label>Title</label><input id="heroTitle" value="'+esc(h.title)+'"></div>'+
+    '<div class="fg"><label>Subtitle</label><textarea id="heroSub" rows="2">'+esc(h.subtitle)+'</textarea></div>'+
+    '<div class="g3"><div class="fg"><label>Banner Image</label><div style="display:flex;gap:.3rem"><input id="heroBanner" value="'+esc(h.banner||'smp_banner.jpg')+'" style="flex:1"><button class="btn btn-a btn-sm" onclick="pickImg(function(n){document.getElementById(\'heroBanner\').value=n})">Pick</button></div></div>'+
+    '<div class="fg"><label>Banner Width</label><input id="heroBannerW" type="number" value="'+esc(h.banner_width||'120')+'" min="40" max="400"></div>'+
+    '<div class="fg"><label>Banner Height</label><input id="heroBannerH" type="number" value="'+esc(h.banner_height||'120')+'" min="40" max="400"></div></div>'+
+    '<div class="fg"><label>Stats (value | label per line)</label><textarea id="heroStats" rows="4">'+(h.stats||[]).map(function(s){return s.value+' | '+s.label}).join('\n')+'</textarea></div></div>';
+}
+
+function rRanks(el){
+  var r=C.ranks||{};var sub=r.subscription_ranks||[];var spec=r.special_ranks||[];
+  el.innerHTML='<div class="st">👑 Ranks</div>'+
+    '<div class="card"><div class="fg"><label>Section Description</label><textarea id="rankDesc" rows="3">'+esc(r.description)+'</textarea></div></div>'+
+    '<h3 style="font-size:.85rem;color:#c084fc;margin:.6rem 0 .4rem">Subscription Ranks</h3>'+
+    sub.map(function(x,i){return rankCard(x,i,'sub')}).join('')+
+    '<button class="add-btn" onclick="addRank(\'sub\')">+ Add Subscription Rank</button>'+
+    '<h3 style="font-size:.85rem;color:#c084fc;margin:1rem 0 .4rem">Special Ranks</h3>'+
+    spec.map(function(x,i){return rankCard(x,i,'spec')}).join('')+
+    '<button class="add-btn" onclick="addRank(\'spec\')">+ Add Special Rank</button>';
+}
+
+function rankCard(x,i,type){
+  var k=type==='sub'?'subscription_ranks':'special_ranks';var pre='C.ranks.'+k+'['+i+']';
+  return '<div class="entry"><div class="eh"><h4>'+esc(x.badge)+' '+esc(x.name)+'</h4><div class="ea">'+
+    '<button class="btn btn-a btn-sm" onclick="moveArr(\'C.ranks.'+k+'\','+i+',-1)" '+(i===0?'disabled':'')+'>▲</button>'+
+    '<button class="btn btn-a btn-sm" onclick="moveArr(\'C.ranks.'+k+'\','+i+',1)">▼</button>'+
+    '<button class="btn btn-a btn-sm" onclick="cloneItem(\'C.ranks.'+k+'\','+i+')">⧉</button>'+
+    '<button class="btn btn-r btn-sm" onclick="delArr(\'C.ranks.'+k+'\','+i+')">✕</button></div></div>'+
+    '<div class="g2">'+
+    '<div class="fg"><label>Name</label><input value="'+esc(x.name)+'" onchange="'+pre+'.name=this.value"></div>'+
+    '<div class="fg"><label>Badge (emoji)</label><input value="'+esc(x.badge)+'" onchange="'+pre+'.badge=this.value"></div>'+
+    '<div class="fg"><label>Color</label><input type="color" value="'+(x.color||'#9333ea')+'" onchange="'+pre+'.color=this.value" style="height:34px;padding:2px"></div>'+
+    '<div class="fg"><label>Price</label><input value="'+esc(x.price)+'" onchange="'+pre+'.price=this.value"></div></div>'+
+    '<div class="fg"><label>Description</label><textarea rows="2" onchange="'+pre+'.description=this.value">'+esc(x.description)+'</textarea></div>'+
+    '<div class="fg"><label>Perks (one per line)</label><textarea rows="3" onchange="'+pre+'.perks=splitL(this.value)">'+(x.perks||[]).join('\n')+'</textarea></div>'+
+    '<div class="fg"><label>Commands (one per line)</label><textarea rows="2" onchange="'+pre+'.commands=splitL(this.value)">'+(x.commands||[]).join('\n')+'</textarea></div></div>';
+}
+
+function rWeapons(el){
+  var w=C.weapons||{};var weapons=w.weapons||[];
+  el.innerHTML='<div class="st">⚔️ Weapons</div>'+
+    '<div class="card"><div class="fg"><label>Section Description</label><textarea id="weapDesc" rows="3">'+esc(w.description)+'</textarea></div></div>'+
+    '<div style="font-size:.72rem;color:#6b7280;margin-bottom:.5rem">'+weapons.length+' weapon'+(weapons.length!==1?'s':'')+'</div>'+
+    weapons.map(function(x,i){return weapCard(x,i)}).join('')+
+    '<button class="add-btn" onclick="addWeapon()">+ Add Weapon</button>';
+}
+
+function weapCard(w,i){
+  var pre='C.weapons.weapons['+i+']';
+  var hasCraft=w.crafting&&w.crafting.grid;
+  var g=hasCraft?w.crafting.grid:Array(9).fill('');
+  var resName=w.crafting?w.crafting.result_name||'':'';
+  var resIcon=w.crafting?w.crafting.result_icon||'':'';
+  var abs=w.abilities||[];
+  var craftHtml='';
+  if(hasCraft){
+    var slots=g.map(function(s,j){
+      var click='pickImg(function(n){setCraft(\''+pre+'\','+j+',n)})';
+      if(s)return '<div class="craft-slot" onclick="'+click+'"><img src="/images/'+esc(s)+'.png" onerror="imgErr(this)"></div>';
+      return '<div class="craft-slot" onclick="'+click+'"><span class="ph">'+(j+1)+'</span></div>';
+    }).join('');
+    craftHtml='<div class="craft-box"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.3rem"><span style="font-size:.7rem;color:#94a3b8;font-weight:600">Crafting Recipe (click to pick image)</span>'+
+      '<button class="btn btn-r btn-sm" onclick="'+pre+'.crafting=null;render()">Remove Recipe</button></div>'+
+      '<div class="craft-grid">'+slots+'</div>'+
+      '<div class="g2" style="margin-top:.4rem;max-width:400px">'+
+      '<div class="fg"><label>Result Name</label><input value="'+esc(resName)+'" onchange="'+pre+'.crafting.result_name=this.value"></div>'+
+      '<div class="fg"><label>Result Image</label><div style="display:flex;gap:.3rem"><input value="'+esc(resIcon)+'" onchange="'+pre+'.crafting.result_icon=this.value" style="flex:1" id="cri'+i+'"><button class="btn btn-a btn-sm" onclick="pickImg(function(n){document.getElementById(\'cri'+i+'\').value=n})">Pick</button></div></div></div></div>';
+  }else{
+    craftHtml='<div class="craft-box"><button class="btn btn-a btn-sm" onclick="'+pre+'.crafting={grid:Array(9).fill(\'\'),result_name:\'\',result_icon:\'\'};render()">+ Add Recipe</button></div>';
+  }
+  var absHtml=abs.map(function(a,j){
+    return '<div class="entry" style="margin:.3rem 0;padding:.5rem"><div class="g2"><div class="fg"><label>Name</label><input value="'+esc(a.name)+'" onchange="'+pre+'.abilities['+j+'].name=this.value"></div><div><button class="btn btn-r btn-sm" onclick="'+pre+'.abilities.splice('+j+',1);render()">✕</button></div></div><div class="fg"><label>Description</label><textarea rows="2" onchange="'+pre+'.abilities['+j+'].description=this.value">'+esc(a.description)+'</textarea></div></div>';
+  }).join('');
+  return '<div class="entry"><div class="eh"><h4>'+esc(w.name)+'</h4><div class="ea">'+
+    '<button class="btn btn-a btn-sm" onclick="moveArr(\'C.weapons.weapons\','+i+',-1)" '+(i===0?'disabled':'')+'>▲</button>'+
+    '<button class="btn btn-a btn-sm" onclick="moveArr(\'C.weapons.weapons\','+i+',1)">▼</button>'+
+    '<button class="btn btn-a btn-sm" onclick="cloneItem(\'C.weapons.weapons\','+i+')">⧉ Clone</button>'+
+    '<button class="btn btn-r btn-sm" onclick="delArr(\'C.weapons.weapons\','+i+')">✕</button></div></div>'+
+    '<div class="g2"><div class="fg"><label>Name</label><input value="'+esc(w.name)+'" onchange="'+pre+'.name=this.value"></div>'+
+    '<div class="fg"><label>Badge</label><input value="'+esc(w.badge)+'" onchange="'+pre+'.badge=this.value" placeholder="Netherite Sword"></div></div>'+
+    '<div class="fg"><label>Description</label><textarea rows="2" onchange="'+pre+'.description=this.value">'+esc(w.description)+'</textarea></div>'+
+    '<div class="g2"><div class="fg"><label>Info Box</label><textarea rows="2" onchange="'+pre+'.info=this.value">'+esc(w.info||'')+'</textarea></div>'+
+    '<div class="fg"><label>Warning Box</label><textarea rows="2" onchange="'+pre+'.warning=this.value">'+esc(w.warning||'')+'</textarea></div></div>'+
+    craftHtml+
+    '<div style="margin-top:.5rem"><div style="font-size:.7rem;color:#94a3b8;font-weight:600;margin-bottom:.3rem">Abilities ('+abs.length+')</div>'+
+    absHtml+
+    '<button class="btn btn-a btn-sm" onclick="addAb(\''+pre+'\')">+ Add Ability</button></div></div>';
+}
+
+function rCrates(el){
+  var c=C.crates||{};var crates=c.crates||[];
+  el.innerHTML='<div class="st">📦 Crates</div>'+
+    '<div class="card"><div class="fg"><label>Section Description</label><textarea id="crateDesc" rows="3">'+esc(c.description)+'</textarea></div>'+
+    '<div class="fg"><label>Key Info</label><textarea id="crateInfo" rows="4">'+esc(c.info)+'</textarea></div></div>'+
+    '<div style="font-size:.72rem;color:#6b7280;margin-bottom:.5rem">'+crates.length+' crate'+(crates.length!==1?'s':'')+'</div>'+
+    crates.map(function(x,i){return crateCard(x,i)}).join('')+
+    '<button class="add-btn" onclick="addCrate()">+ Add Crate</button>';
+}
+
+function crateCard(c,i){
+  var pre='C.crates.crates['+i+']';var rewards=c.rewards||[];
+  var rwHtml=rewards.map(function(r,j){
+    return '<span class="tag'+(r.rare?' rare':'')+'" onclick="togRare('+i+','+j+')" title="Click=toggle rare">'+esc(r.name)+'<span class="x" onclick="event.stopPropagation();delRw('+i+','+j+')">✕</span></span>';
+  }).join('');
+  return '<div class="entry"><div class="eh"><h4>'+esc(c.name)+'</h4><div class="ea">'+
+    '<button class="btn btn-a btn-sm" onclick="moveArr(\'C.crates.crates\','+i+',-1)" '+(i===0?'disabled':'')+'>▲</button>'+
+    '<button class="btn btn-a btn-sm" onclick="moveArr(\'C.crates.crates\','+i+',1)">▼</button>'+
+    '<button class="btn btn-a btn-sm" onclick="cloneItem(\'C.crates.crates\','+i+')">⧉ Clone</button>'+
+    '<button class="btn btn-r btn-sm" onclick="delArr(\'C.crates.crates\','+i+')">✕</button></div></div>'+
+    '<div class="g3"><div class="fg"><label>Name</label><input value="'+esc(c.name)+'" onchange="'+pre+'.name=this.value"></div>'+
+    '<div class="fg"><label>Price</label><input value="'+esc(c.price)+'" onchange="'+pre+'.price=this.value" placeholder="$0.50/key"></div></div>'+
+    '<div class="fg"><label>Description</label><textarea rows="2" onchange="'+pre+'.description=this.value">'+esc(c.description)+'</textarea></div>'+
+    '<div class="fg"><label>Rewards (click=toggle rare)</label><div style="display:flex;flex-wrap:wrap;gap:.25rem">'+rwHtml+'</div>'+
+    '<div style="display:flex;gap:.3rem;margin-top:.3rem"><input id="newRw'+i+'" placeholder="Add reward..." style="flex:1" onkeydown="if(event.key===\'Enter\')addRw('+i+')"><button class="btn btn-a btn-sm" onclick="addRw('+i+')">+</button></div></div></div>';
+}
+
+function rItems(el){
+  var it=C.items||{};var items=it.items||[];
+  el.innerHTML='<div class="st">🔮 Items</div>'+
+    '<div class="card"><div class="fg"><label>Section Description</label><textarea id="itemDesc" rows="3">'+esc(it.description)+'</textarea></div></div>'+
+    '<div style="font-size:.72rem;color:#6b7280;margin-bottom:.5rem">'+items.length+' item'+(items.length!==1?'s':'')+'</div>'+
+    items.map(function(x,i){return itemCard(x,i)}).join('')+
+    '<button class="add-btn" onclick="addItem()">+ Add Item</button>';
+}
+
+function itemCard(x,i){
+  var pre='C.items.items['+i+']';var g=(x.crafting&&x.crafting.grid)?x.crafting.grid:null;var abs=x.abilities||[];
+  var craftHtml='';
+  if(g){
+    var slots=g.map(function(s,j){
+      var click='pickImg(function(n){setCraft(\''+pre+'\','+j+',n)})';
+      if(s)return '<div class="craft-slot" onclick="'+click+'"><img src="/images/'+esc(s)+'.png" onerror="imgErr(this)"></div>';
+      return '<div class="craft-slot" onclick="'+click+'"><span class="ph">'+(j+1)+'</span></div>';
+    }).join('');
+    craftHtml='<div class="craft-box"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.3rem"><span style="font-size:.7rem;color:#94a3b8;font-weight:600">Crafting Recipe</span>'+
+      '<button class="btn btn-r btn-sm" onclick="'+pre+'.crafting=null;render()">Remove</button></div>'+
+      '<div class="craft-grid">'+slots+'</div>'+
+      '<div class="g2" style="margin-top:.4rem;max-width:400px">'+
+      '<div class="fg"><label>Result Name</label><input value="'+esc(x.crafting.result_name||'')+'" onchange="'+pre+'.crafting.result_name=this.value"></div>'+
+      '<div class="fg"><label>Result Image</label><div style="display:flex;gap:.3rem"><input value="'+esc(x.crafting.result_icon||'')+'" onchange="'+pre+'.crafting.result_icon=this.value" style="flex:1" id="iri'+i+'"><button class="btn btn-a btn-sm" onclick="pickImg(function(n){document.getElementById(\'iri'+i+'\').value=n})">Pick</button></div></div></div></div>';
+  }else{
+    craftHtml='<button class="btn btn-a btn-sm" onclick="'+pre+'.crafting={grid:Array(9).fill(\'\'),result_name:\'\',result_icon:\'\'};render()">+ Add Recipe</button>';
+  }
+  var absHtml=abs.map(function(a,j){
+    return '<div class="entry" style="margin:.3rem 0;padding:.5rem"><div class="g2"><div class="fg"><label>Name</label><input value="'+esc(a.name)+'" onchange="'+pre+'.abilities['+j+'].name=this.value"></div><div><button class="btn btn-r btn-sm" onclick="'+pre+'.abilities.splice('+j+',1);render()">✕</button></div></div><div class="fg"><label>Description</label><textarea rows="2" onchange="'+pre+'.abilities['+j+'].description=this.value">'+esc(a.description)+'</textarea></div></div>';
+  }).join('');
+  return '<div class="entry"><div class="eh"><h4>'+esc(x.name)+'</h4><div class="ea">'+
+    '<button class="btn btn-a btn-sm" onclick="moveArr(\'C.items.items\','+i+',-1)" '+(i===0?'disabled':'')+'>▲</button>'+
+    '<button class="btn btn-a btn-sm" onclick="moveArr(\'C.items.items\','+i+',1)">▼</button>'+
+    '<button class="btn btn-a btn-sm" onclick="cloneItem(\'C.items.items\','+i+')">⧉ Clone</button>'+
+    '<button class="btn btn-r btn-sm" onclick="delArr(\'C.items.items\','+i+')">✕</button></div></div>'+
+    '<div class="g2"><div class="fg"><label>Name</label><input value="'+esc(x.name)+'" onchange="'+pre+'.name=this.value"></div>'+
+    '<div class="fg"><label>Badge</label><input value="'+esc(x.badge)+'" onchange="'+pre+'.badge=this.value"></div></div>'+
+    '<div class="fg"><label>Description</label><textarea rows="2" onchange="'+pre+'.description=this.value">'+esc(x.description)+'</textarea></div>'+
+    '<div class="fg"><label>Info Box</label><textarea rows="2" onchange="'+pre+'.info=this.value">'+esc(x.info||'')+'</textarea></div>'+
+    craftHtml+
+    '<div style="margin-top:.5rem"><div style="font-size:.7rem;color:#94a3b8;font-weight:600;margin-bottom:.3rem">Abilities ('+abs.length+')</div>'+
+    absHtml+
+    '<button class="btn btn-a btn-sm" onclick="addAb(\''+pre+'\')">+ Add Ability</button></div></div>';
+}
+
+function rSystems(el){
+  var s=C.systems||{};var cards=s.cards||[];
+  el.innerHTML='<div class="st">⚙️ Systems</div>'+
+    '<div class="card"><div class="fg"><label>Section Description</label><textarea id="sysDesc" rows="3">'+esc(s.description)+'</textarea></div></div>'+
+    cards.map(function(c,i){return sysCard(c,i)}).join('')+
+    '<button class="add-btn" onclick="addSysCard()">+ Add System Card</button>';
+}
+
+function sysCard(c,i){
+  var pre='C.systems.cards['+i+']';
+  return '<div class="entry"><div class="eh"><h4>'+esc(c.icon)+' '+esc(c.name)+'</h4><div class="ea">'+
+    '<button class="btn btn-a btn-sm" onclick="moveArr(\'C.systems.cards\','+i+',-1)" '+(i===0?'disabled':'')+'>▲</button>'+
+    '<button class="btn btn-a btn-sm" onclick="moveArr(\'C.systems.cards\','+i+',1)">▼</button>'+
+    '<button class="btn btn-a btn-sm" onclick="cloneItem(\'C.systems.cards\','+i+')">⧉ Clone</button>'+
+    '<button class="btn btn-r btn-sm" onclick="delArr(\'C.systems.cards\','+i+')">✕</button></div></div>'+
+    '<div class="g3"><div class="fg"><label>Name</label><input value="'+esc(c.name)+'" onchange="'+pre+'.name=this.value"></div>'+
+    '<div class="fg"><label>Icon</label><input value="'+esc(c.icon)+'" onchange="'+pre+'.icon=this.value"></div>'+
+    '<div class="fg"><label>Color</label><select onchange="'+pre+'.color_class=this.value">'+
+    '<option value="supreme"'+(c.color_class==='supreme'?' selected':'')+'>Purple</option>'+
+    '<option value="corrupted"'+(c.color_class==='corrupted'?' selected':'')+'>Red</option>'+
+    '<option value="blessed"'+(c.color_class==='blessed'?' selected':'')+'>Blue</option>'+
+    '<option value="champion"'+(c.color_class==='champion'?' selected':'')+'>Gold</option>'+
+    '<option value="crimson"'+(c.color_class==='crimson'?' selected':'')+'>Crimson</option></select></div></div>'+
+    '<div class="fg"><label>Description</label><textarea rows="3" onchange="'+pre+'.description=this.value">'+esc(c.description)+'</textarea></div></div>';
+}
+
+function rImages(el){
+  var imgsHtml=IMGS.map(function(n){
+    return '<div style="background:#0d0d14;border:1px solid #1e1e2e;border-radius:7px;padding:.4rem;text-align:center;position:relative">'+
+      '<img src="/images/'+n+'" style="width:100%;height:50px;object-fit:contain;border-radius:3px" loading="lazy" onerror="this.style.display=\'none\'">'+
+      '<div style="font-size:.55rem;color:#94a3b8;margin-top:2px;word-break:break-all;max-height:2.2em;overflow:hidden">'+n+'</div>'+
+      '<button style="position:absolute;top:3px;right:3px;background:#dc2626;color:#fff;border:none;border-radius:50%;width:16px;height:16px;font-size:.5rem;cursor:pointer" onclick="delImg(\''+n+'\')">✕</button></div>';
+  }).join('');
+  el.innerHTML='<div class="st">🖼️ Images ('+IMGS.length+')</div>'+
+    '<div class="card"><div class="upload-zone" id="dropZone" onclick="document.getElementById(\'fileInput\').click()">'+
+    '<input type="file" id="fileInput" accept="image/*" multiple style="display:none" onchange="handleUpload(this.files)">'+
+    '<p style="font-size:.82rem;color:#94a3b8">📁 Click or drag images here to upload</p>'+
+    '<p style="font-size:.62rem;color:#6b7280">PNG, JPG, SVG, GIF — use in crafting grids and as icons</p></div></div>'+
+    '<div class="card"><h3 style="font-size:.82rem;color:#c084fc;margin-bottom:.5rem">Uploaded Images</h3>'+
+    '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:.4rem">'+imgsHtml+'</div></div>';
+  var zone=document.getElementById('dropZone');
+  zone.addEventListener('dragover',function(e){e.preventDefault();zone.style.borderColor='#9333ea'});
+  zone.addEventListener('dragleave',function(){zone.style.borderColor='#2a2a3a'});
+  zone.addEventListener('drop',function(e){e.preventDefault();zone.style.borderColor='#2a2a3a';handleUpload(e.dataTransfer.files)});
+}
+
+function handleUpload(files){
+  for(var i=0;i<files.length;i++){
+    (function(file){
+      var reader=new FileReader();
+      reader.onload=function(){
+        var b64=reader.result.split(',')[1];
+        apiCall('/api/upload',{method:'POST',body:JSON.stringify({filename:file.name,data:b64})})
+        .then(function(){toast('Uploaded: '+file.name,'s');return apiCall('/api/images')})
+        .then(function(d){IMGS=d;if(sec==='images')rImages(document.getElementById('content'))})
+        .catch(function(e){toast('Failed: '+e.message,'e')});
+      };
+      reader.readAsDataURL(file);
+    })(files[i]);
+  }
+}
+
+function delImg(name){if(!confirm('Delete '+name+'?'))return;apiCall('/api/images/'+name,{method:'DELETE'}).then(function(){IMGS=IMGS.filter(function(n){return n!==name});rImages(document.getElementById('content'));toast('Deleted','s')}).catch(function(e){toast(e.message,'e')})}
+
+function pickImg(cb){
+  var m=document.createElement('div');m.className='img-picker';m.id='imgPicker';
+  var html=IMGS.map(function(n){return '<div class="img-opt" onclick="pickDone(\''+n+'\')"><img src="/images/'+n+'" loading="lazy"><div class="nm">'+n+'</div></div>'}).join('');
+  m.innerHTML='<div class="img-picker-inner"><h3 style="color:#c084fc;margin-bottom:.6rem">Select Image</h3><div class="img-grid">'+html+'</div><div style="margin-top:.6rem"><button class="btn btn-a btn-sm" onclick="document.getElementById(\'imgPicker\').remove()">Cancel</button></div></div>';
+  m._cb=cb;document.body.appendChild(m);
+}
+function pickDone(name){var m=document.getElementById('imgPicker');var cb=m?m._cb:null;if(m)m.remove();if(cb)cb(name)}
+function imgErr(el){var i=parseInt(el.dataset.extIndex||0);var fallbacks=['.png','.jpg','.svg'];i++;if(i>=fallbacks.length){el.style.display='none';return}el.dataset.extIndex=i;var base=el.src.replace(/\.[^.]+$/,'');el.src=base+fallbacks[i]}
+
+// GENERIC ARRAY HELPERS
+function evalPath(p){var parts=p.split('.');var obj=C;for(var i=0;i<parts.length;i++){var key=parts[i].replace(/\[(\d+)\]/,'');var idx=parts[i].match(/\[(\d+)\]/);if(key==='C'&&i===0)continue;obj=obj[key];if(idx)obj=obj[parseInt(idx[1])]}return obj}
+function setArr(path,arr){var parts=path.split('.');var obj=C;for(var i=0;i<parts.length-1;i++){var key=parts[i].replace(/\[(\d+)\]/,'');var idx=parts[i].match(/\[(\d+)\]/);if(key==='C'&&i===0)continue;obj=obj[key];if(idx)obj=obj[parseInt(idx[1])]}var last=parts[parts.length-1].replace(/\[(\d+)\]/,'');var lastIdx=parts[parts.length-1].match(/\[(\d+)\]/);if(lastIdx)obj[last][parseInt(lastIdx[1])]=arr;else obj[last]=arr}
+function getArr(path){return evalPath(path)}
+function moveArr(path,i,d){var arr=getArr(path);var j=i+d;if(j<0||j>=arr.length)return;var t=arr[i];arr[i]=arr[j];arr[j]=t;render()}
+function delArr(path,i){if(!confirm('Delete?'))return;var arr=getArr(path);arr.splice(i,1);render()}
+function cloneItem(path,i){var arr=getArr(path);var c=deepCopy(arr[i]);if(c.name)c.name+=' (Copy)';if(c.title)c.title+=' (Copy)';arr.splice(i+1,0,c);render();toast('Cloned!','i')}
+function addAb(pre){
+  var parts=pre.split('.');var obj=C;
+  for(var i=0;i<parts.length;i++){var k=parts[i].replace(/\[(\d+)\]/,'');var idx=parts[i].match(/\[(\d+)\]/);obj=obj[k];if(idx)obj=obj[parseInt(idx[1])]}
+  if(!obj.abilities)obj.abilities=[];
+  obj.abilities.push({name:'',description:''});
+  render();
+}
+function setCraft(pre,i,val){
+  var parts=pre.split('.');var obj=C;
+  for(var k=0;k<parts.length;k++){var key=parts[k].replace(/\[(\d+)\]/,'');var idx=parts[k].match(/\[(\d+)\]/);obj=obj[key];if(idx)obj=obj[parseInt(idx[1])]}
+  if(!obj.crafting)obj.crafting={grid:Array(9).fill(''),result_name:'',result_icon:''};
+  obj.crafting.grid[i]=val;
+  render();
+}
+
+function addRank(type){var k=type==='sub'?'subscription_ranks':'special_ranks';C.ranks=C.ranks||{};C.ranks[k]=C.ranks[k]||[];C.ranks[k].push({name:'New Rank',tag:'Rank',color:'#9333ea',badge:'',price:'',description:'',perks:[],commands:[]});render()}
+function addWeapon(){C.weapons=C.weapons||{};C.weapons.weapons=C.weapons.weapons||[];C.weapons.weapons.push({name:'New Weapon',badge:'',description:'',crafting:null,abilities:[]});render()}
+function addCrate(){C.crates=C.crates||{};C.crates.crates=C.crates.crates||[];C.crates.crates.push({name:'New Crate',price:'',description:'',rewards:[]});render()}
+function addRw(i){var inp=document.getElementById('newRw'+i);if(!inp||!inp.value.trim())return;C.crates.crates[i].rewards=C.crates.crates[i].rewards||[];C.crates.crates[i].rewards.push({name:inp.value.trim()});inp.value='';render()}
+function togRare(ci,ri){C.crates.crates[ci].rewards[ri].rare=!C.crates.crates[ci].rewards[ri].rare;render()}
+function delRw(ci,ri){C.crates.crates[ci].rewards.splice(ri,1);render()}
+function addItem(){C.items=C.items||{};C.items.items=C.items.items||[];C.items.items.push({name:'New Item',badge:'',description:'',crafting:null,abilities:[]});render()}
+function addSysCard(){C.systems=C.systems||{};C.systems.cards=C.systems.cards||[];C.systems.cards.push({name:'New System',icon:'⚙️',color_class:'supreme',description:''});render()}
+
+function gatherHero(){var el=document.getElementById('heroTitle');if(!el)return;var h=C.hero||{};h.title=el.value;h.subtitle=document.getElementById('heroSub').value;h.banner=document.getElementById('heroBanner')?document.getElementById('heroBanner').value:'';h.banner_width=parseInt(document.getElementById('heroBannerW').value)||120;h.banner_height=parseInt(document.getElementById('heroBannerH').value)||120;var st=document.getElementById('heroStats')?document.getElementById('heroStats').value:'';h.stats=st.split('\n').filter(function(x){return x.indexOf('|')>=0}).map(function(x){var p=x.split('|');return{value:parseInt(p[0])||0,label:p[1].trim()}});C.hero=h}
+function gatherDesc(){var e;if(sec==='ranks'){e=document.getElementById('rankDesc');if(e)C.ranks.description=e.value}else if(sec==='weapons'){e=document.getElementById('weapDesc');if(e)C.weapons.description=e.value}else if(sec==='crates'){e=document.getElementById('crateDesc');var e2=document.getElementById('crateInfo');if(e)C.crates.description=e.value;if(e2)C.crates.info=e2.value}else if(sec==='items'){e=document.getElementById('itemDesc');if(e)C.items.description=e.value}else if(sec==='systems'){e=document.getElementById('sysDesc');if(e)C.systems.description=e.value}}
+
+function doSave(){gatherHero();gatherDesc();if(!C.hero||!C.hero.title){toast('Hero title is required!','e');return}setStatus('Saving...');apiCall('/api/save',{method:'POST',body:JSON.stringify(C)}).then(function(){setStatus('Saved!','ok');toast('Saved!','s')}).catch(function(e){setStatus('Error: '+e.message,'err');toast(e.message,'e')})}
+function doGenerate(){gatherHero();gatherDesc();setStatus('Generating...');apiCall('/api/generate',{method:'POST',body:'{}'}).then(function(r){setStatus('Generated! ('+Math.round(r.size/1024)+' KB)','ok');toast('Generated!','s')}).catch(function(e){setStatus('Error: '+e.message,'err');toast(e.message,'e')})}
+function doDeploy(){if(!confirm('Deploy to Cloudflare?'))return;gatherHero();gatherDesc();setStatus('Deploying...');apiCall('/api/deploy',{method:'POST',body:'{}'}).then(function(){setStatus('Deployed!','ok');toast('Deployed!','s')}).catch(function(e){setStatus('Deploy failed: '+e.message,'err');toast(e.message,'e')})}
+function showBackups(){apiCall('/api/backups').then(function(b){var m=document.createElement('div');m.className='modal-overlay';var bHtml=b.length?b.map(function(x){return '<div style="display:flex;justify-content:space-between;align-items:center;padding:.4rem;margin:.25rem 0;background:#0d0d14;border:1px solid #1e1e2e;border-radius:7px"><span style="font-size:.72rem;color:#94a3b8">'+x+'</span><button class="btn btn-a btn-sm" onclick="doRestore(\''+x+'\',this)">Restore</button></div>'}).join(''):'<p style="color:#6b7280">No backups yet.</p>';m.innerHTML='<div class="modal"><h3>📋 Backups</h3>'+bHtml+'<div class="modal-acts"><button class="btn btn-a" onclick="this.closest(\'.modal-overlay\').remove()">Close</button></div></div>';document.body.appendChild(m)}).catch(function(e){toast(e.message,'e')})}
+function doRestore(fn,btn){if(!confirm('Restore '+fn+'?'))return;apiCall('/api/restore',{method:'POST',body:JSON.stringify({filename:fn})}).then(function(){return apiCall('/api/content')}).then(function(d){C=d;render();btn.closest('.modal-overlay').remove();toast('Restored!','s')}).catch(function(e){toast(e.message,'e')})}
+function sw(s,btn){sec=s;document.querySelectorAll('.sidebar button').forEach(function(b){b.classList.remove('active')});btn.classList.add('active');render()}
+</script>
+</body>
+</html>

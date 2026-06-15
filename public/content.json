@@ -1,0 +1,520 @@
+{
+  "hero": {
+    "title": "Corrupted SMP Wiki",
+    "subtitle": "The definitive guide to every rank, weapon, crate, item, and system on Corrupted SMP. Craft smarter. Fight harder. Dominate.",
+    "stats": [
+      {
+        "value": 6,
+        "label": "Ranks"
+      },
+      {
+        "value": 7,
+        "label": "Custom Weapons"
+      },
+      {
+        "value": 5,
+        "label": "Crates"
+      },
+      {
+        "value": 8,
+        "label": "Custom Items"
+      }
+    ],
+    "banner": "smp_banner.jpg"
+  },
+  "ranks": {
+    "description": "Ranks reward players with exclusive <span class=\"highlight\">kits, crate keys, command access, and cosmetics</span>. Corrupted SMP features two kinds: <strong>Subscription Ranks</strong> — a four-tier ladder that stacks per season — and <strong>Special Ranks</strong> earned through gameplay and generosity. Higher tiers inherit all perks from the tiers below.",
+    "subscription_ranks": [
+      {
+        "name": "Crimson Rank",
+        "tag": "Crimson",
+        "color": "#dc2626",
+        "badge": "🔴",
+        "price": "$2.99 / season",
+        "description": "The entry tier — a solid head start for new players. Lasts until the next season resets.",
+        "perks": [
+          "Crimson Kit: 3 Cosmic Keys, diamond gear, and other items. Claimable once per week."
+        ],
+        "commands": [
+          "/hat",
+          "/nick",
+          "/nick color"
+        ],
+        "color_class": "crimson"
+      },
+      {
+        "name": "Blessed Rank",
+        "tag": "Blessed",
+        "color": "#3b82f6",
+        "badge": "🔵",
+        "price": "$4.99 / season",
+        "description": "Unlocks deeper utility and better gear. Includes all Crimson perks plus exclusive commands.",
+        "perks": [
+          "Blessed Kit: 3 Blessed Keys, fully-enchanted diamond gear, and other items. Claimable once per week."
+        ],
+        "commands": [
+          "/ptime",
+          "/pweather",
+          "/enderchest",
+          "/anvil",
+          "/invsee",
+          "+ all Crimson commands"
+        ],
+        "color_class": "blessed"
+      },
+      {
+        "name": "Supreme Rank",
+        "tag": "Supreme",
+        "color": "#a855f7",
+        "badge": "🟣",
+        "price": "$7.99 / season",
+        "description": "Top-tier subscription. Netherite gear, dual crate keys, and crafting station access.",
+        "perks": [
+          "Supreme Kit: 3 Cosmic & Blessed Keys, netherite gear, and other items. Claimable once per week."
+        ],
+        "commands": [
+          "/cartographytable",
+          "/grindstone",
+          "/stonecutter",
+          "/top",
+          "+ all Blessed commands"
+        ],
+        "color_class": "supreme"
+      },
+      {
+        "name": "Corrupted Rank",
+        "tag": "Corrupted",
+        "color": "#ef4444",
+        "badge": "🔴",
+        "price": "$9.99 / season",
+        "description": "The apex subscription. Every command, the finest gear, and monthly Corrupted Kit drops.",
+        "perks": [
+          "Corrupted Kit: 3 Corrupted Keys, fully-enchanted netherite gear, and other valuable items. Claimable once per month."
+        ],
+        "commands": [
+          "/compass",
+          "/depth",
+          "/feed",
+          "/near",
+          "+ all Supreme commands"
+        ],
+        "color_class": "corrupted"
+      }
+    ],
+    "special_ranks": [
+      {
+        "name": "Champion",
+        "tag": "Champion",
+        "color": "#fbbf24",
+        "badge": "🏆",
+        "price": "Earned — Not Purchasable",
+        "description": "A prestige rank earned by reaching <strong>#1 on the Duels Leaderboard</strong>. Proof you stand above everyone in the arena.",
+        "perks": [
+          "Champion Kit: 5 KOTH Keys, netherite gear, and other items."
+        ],
+        "commands": [
+          "/anvil",
+          "/enderchest"
+        ],
+        "color_class": "champion"
+      },
+      {
+        "name": "Top Donator",
+        "tag": "Top Donator",
+        "color": "#f59e0b",
+        "badge": "💰",
+        "price": "The #1 All-Time Donor",
+        "description": "The crown reserved for the server's single biggest supporter. Not bought directly — it belongs to whoever has supported the server the most.",
+        "perks": [
+          "Every command from all four paid ranks (Crimson, Blessed, Supreme, Corrupted).",
+          "Every kit from all four paid ranks."
+        ],
+        "commands": [],
+        "color_class": "topdonator"
+      }
+    ]
+  },
+  "weapons": {
+    "description": "Each weapon is a hand-built arsenal piece with unique abilities, lore, and crafting recipes. Weapons range from the ice-wielding <span class=\"highlight\">Frozen Staff</span> to the plague-spreading <span class=\"highlight\">Forsaken Trident</span>. Some are crafted, some drop from crates, and a few are earned through special rituals.",
+    "weapons": [
+      {
+        "name": "💀 Soul Reaper",
+        "badge": "Netherite Sword",
+        "description": "A soul-bound netherite sword that grows stronger with every life it takes. Each kill mends your wounds, tears nearby enemies off their feet, and feeds a rising frenzy — the longer your killstreak, the deadlier you become. Stop killing, and the power fades.",
+        "crafting": {
+          "grid": [
+            "wither_skeleton_skull",
+            "skeleton_skull",
+            "wither_skeleton_skull",
+            "skeleton_skull",
+            "netherite_sword",
+            "skeleton_skull",
+            "wither_skeleton_skull",
+            "skeleton_skull",
+            "wither_skeleton_skull"
+          ],
+          "result_name": "Soul Reaper",
+          "result_icon": "netherite_sword"
+        },
+        "abilities": [
+          {
+            "name": "Soul Harvest",
+            "description": "On every kill: heals you for <strong>6 hearts</strong> and launches all nearby enemies into the air, dropping them for fall damage — with a burst of souls."
+          },
+          {
+            "name": "Reaping Frenzy",
+            "description": "Each kill stacks Strength (up to <strong><strong>Strength II</strong>I</strong>), lasting 60s and refreshing with every kill. Go <strong>10 seconds without a kill</strong> and the frenzy resets — keep the streak alive to stay at full power."
+          }
+        ]
+      },
+      {
+        "name": "🏹 Rift Bow",
+        "badge": "Bow · Under Development",
+        "description": "A bow that tears open rifts in reality. Its arrows don't just strike — they collapse space, vacuuming everything nearby into a single point before the rift violently detonates.",
+        "info": "Obtainment method is still being finalized. Check back for updates.",
+        "abilities": [
+          {
+            "name": "Void Implosion",
+            "description": "On arrow hit, every enemy within 8 blocks is pulled toward the impact point, dragging scattered foes together."
+          },
+          {
+            "name": "Rift Burst",
+            "description": "About half a second after the pull, the rift detonates, hitting every enemy within 4 blocks for 8 damage (<strong>4 hearts</strong>) to players / 10 to mobs (<strong>5 hearts</strong>), before armor."
+          }
+        ]
+      },
+      {
+        "name": "🔱 Forsaken Trident",
+        "badge": "Trident · Limited (3 max)",
+        "description": "A cursed trident steeped in wither and decay. Strike with it or hurl it into a crowd and a plague erupts outward in waves, withering everything it touches while the ground itself rots away beneath their feet. Only three can ever exist on the entire server.",
+        "crafting": {
+          "grid": [
+            "wither_skeleton_skull",
+            "wither_rose",
+            "wither_skeleton_skull",
+            "soul_soil",
+            "trident",
+            "soul_soil",
+            "wither_skeleton_skull",
+            "nether_star",
+            "wither_skeleton_skull"
+          ],
+          "result_name": "Forsaken Trident",
+          "result_icon": "trident"
+        },
+        "warning": "Only 3 can ever be forged on the entire server. A server-wide broadcast announces each one crafted.",
+        "abilities": [
+          {
+            "name": "Plague Burst",
+            "description": "On hit (melee or thrown), a plague erupts in 3 expanding waves out to ~14 blocks, striking everyone caught with Wither II for 15 seconds."
+          },
+          {
+            "name": "Earth Rot",
+            "description": "The ground around the impact decays into soul sand, miring and slowing your enemies. It heals back on its own after a few minutes."
+          },
+          {
+            "name": "Returning Curse",
+            "description": "Thrown, it always flies back to your hand (Loyalty enchantment)."
+          }
+        ]
+      },
+      {
+        "name": "⚡ Supreme Spear",
+        "badge": "Spear · Corrupted Crate",
+        "description": "A spear crackling with storm and plague. Every strike answers with the sky itself — lightning rains down and bleeding tears through everything around your target. It has no cooldown, every single hit unleashes its full power.",
+        "info": "Currently obtained from the Corrupted Crate. The real obtainment method is under development.",
+        "abilities": [
+          {
+            "name": "Lightning Storm",
+            "description": "50% chance per hit. Calls a lightning bolt down onto each enemy in range and deals 10 bonus damage (<strong>5 hearts</strong> before armor)."
+          },
+          {
+            "name": "Bleeding",
+            "description": "25% chance per hit. Tears a bleeding wound into each enemy in range for 6 damage (<strong>3 hearts</strong> before armor)."
+          },
+          {
+            "name": "Impulse",
+            "description": "All of the spear's effects strike every enemy within a 10-block radius of your target (never you)."
+          }
+        ]
+      },
+      {
+        "name": "🔨 Corrupted Mace",
+        "badge": "Mace · Corrupted Crate",
+        "description": "A mace that corrupts the very earth on impact. Drop onto your foes from a height and the ground erupts in a corrupting shockwave — the higher you fall, the wider the devastation.",
+        "info": "Obtained from the Corrupted Crate.",
+        "abilities": [
+          {
+            "name": "Earth Corruption",
+            "description": "Requires a 15+ block fall (like a vanilla mace). On impact, a shockwave erupts whose size scales with your fall: 10-block radius at 15 blocks, growing by 1 block per extra block fallen, up to 20 blocks max (reached at ~25 blocks). The ground cracks and corrupts into crying obsidian, which heals back after ~10 minutes."
+          },
+          {
+            "name": "Corrupting Burst",
+            "description": "25% chance on a qualifying slam. Every enemy caught in the shockwave takes 6 damage (<strong>3 hearts</strong> before armor)."
+          }
+        ]
+      },
+      {
+        "name": "❄️ Frozen Staff",
+        "badge": "Staff · Ritual Only",
+        "description": "A staff of absolute winter. Its power is encasing — most of its attacks seal enemies inside a block of solid ice, freezing them in place, and any hit on a frozen enemy shatters them for massive bonus damage. Lock your target down, then break them apart.",
+        "abilities": [
+          {
+            "name": "Ice Orb",
+            "description": "Tap to conjure a floating ice orb that grows with each tap, up to 10 charges. Pause briefly to hurl it where you aim. On impact it bursts into an ice sphere whose radius is 1.5× the orb's size, dealing <strong>5 hearts</strong> and encasing every enemy caught for 10 seconds."
+          },
+          {
+            "name": "Frost Satellites",
+            "description": "Summons 3 ice shards that orbit you for 30 seconds. Every 2 seconds they auto-target the nearest enemy within 100 blocks and fire an icy bolt for <strong>3 hearts</strong> + a 3-second encase."
+          },
+          {
+            "name": "Shatter Nova",
+            "description": "Instantly shatters every frozen enemy within 60 blocks for <strong>9 hearts</strong> each. If nothing is frozen, no cooldown is used."
+          },
+          {
+            "name": "Ice Spike",
+            "description": "Erupts a cluster of ice spikes at the block you aim at, dealing <strong>6 hearts</strong> and encasing enemies within 5 blocks. The spikes melt after 8s."
+          },
+          {
+            "name": "Frost Shatter",
+            "description": "Hitting a frozen enemy shatters their ice for <strong>9 hearts</strong> of bonus damage."
+          },
+          {
+            "name": "Encase",
+            "description": "Frozen enemies are locked in an ice block: heavy Slowness + Mining Fatigue, unable to move until it melts — and the next hit shatters them."
+          },
+          {
+            "name": "Frost Walker",
+            "description": "Water freezes solid beneath you as you walk while holding the staff."
+          }
+        ]
+      },
+      {
+        "name": "🌀 Blade of The Chaos",
+        "badge": "Owner Only",
+        "description": "A blade forged from pure catastrophe, bound to the will of the server's Owner alone. In the right hand it rewrites the battlefield; in any other, it is instant death — those who aren't its master and dare to grasp it are erased on the spot.",
+        "warning": "Wielded by the Owner only. Attempting to hold it as a non-owner results in instant death.",
+        "abilities": [
+          {
+            "name": "Chaos Strike",
+            "description": "Every single strike unleashes a random catastrophe. Lightning, fire, the void itself — no two hits are ever the same."
+          },
+          {
+            "name": "Sealed Powers",
+            "description": "Its deeper powers remain sealed — known only to the one who wields it."
+          }
+        ]
+      }
+    ]
+  },
+  "crates": {
+    "description": "Crates are reward chests unlocked with <span class=\"highlight\">keys</span>. Each crate has its own themed loot pool and rarity tier, from the everyday <strong>AFK Crate</strong> to the high-end <strong>Corrupted Crate</strong>, holding everything from resources to the server's strongest custom weapons.",
+    "info": "AFK Key — farmed for free by staying AFK. KOTH Key — earned by winning a KOTH match. All other keys — available from the store (paid). During development: Keys are obtainable through the weekly Key-All event (a wheel reset to hold every key) and reaching #1 on the Duels leaderboard (Champion rank grants KOTH keys).",
+    "crates": [
+      {
+        "name": "💤 AFK Crate",
+        "description": "The most common crate — designed for early-game progression. The gateway to better loot.",
+        "rewards": [
+          {
+            "name": "Ore Blocks"
+          },
+          {
+            "name": "Trims"
+          },
+          {
+            "name": "Relic of The Fortune",
+            "rare": true
+          },
+          {
+            "name": "And more..."
+          }
+        ]
+      },
+      {
+        "name": "🏔️ KOTH Crate",
+        "description": "A PvP-focused crate for the warriors of the arena. Earned through combat supremacy.",
+        "rewards": [
+          {
+            "name": "Diamond Blocks"
+          },
+          {
+            "name": "Netherite Ingots",
+            "rare": true
+          },
+          {
+            "name": "Other Crate Keys"
+          },
+          {
+            "name": "KOTH Kit",
+            "rare": true
+          }
+        ]
+      },
+      {
+        "name": "🌌 Cosmic Crate",
+        "price": "$0.50 / key",
+        "description": "A premium crate packed with valuable resources, Netherite equipment, and exclusive rewards.",
+        "rewards": [
+          {
+            "name": "Monster Spawner"
+          },
+          {
+            "name": "Ore Blocks"
+          },
+          {
+            "name": "Other Crate Keys"
+          },
+          {
+            "name": "Cosmic Kit",
+            "rare": true
+          },
+          {
+            "name": "Relic of Blood Fang",
+            "rare": true
+          }
+        ]
+      },
+      {
+        "name": "✨ Blessed Crate",
+        "price": "$1.00 / key",
+        "description": "A premium crate containing exclusive items, armor trim collections, and unique artifacts.",
+        "rewards": [
+          {
+            "name": "Bundle of Every Armor Trim",
+            "rare": true
+          },
+          {
+            "name": "Dash Item",
+            "rare": true
+          },
+          {
+            "name": "Other Crate Keys"
+          },
+          {
+            "name": "Blessed Kit",
+            "rare": true
+          },
+          {
+            "name": "Relic of The Blessing",
+            "rare": true
+          }
+        ]
+      },
+      {
+        "name": "☠️ Corrupted Crate",
+        "price": "$2.00 / key",
+        "description": "The highest-tier crate on the server. Powerful equipment, rare collectibles, and the strongest custom weapons.",
+        "rewards": [
+          {
+            "name": "Other Crate Keys"
+          },
+          {
+            "name": "Elytra",
+            "rare": true
+          },
+          {
+            "name": "Corrupted Mace",
+            "rare": true
+          },
+          {
+            "name": "Corrupted Kit (incl. Supreme Spear)",
+            "rare": true
+          },
+          {
+            "name": "Relic of Corruption",
+            "rare": true
+          }
+        ]
+      }
+    ]
+  },
+  "items": {
+    "description": "Utility, mobility, and power beyond weapons. These items expand your toolkit with unique mechanics — from frozen resurrection to wind-powered traversal.",
+    "items": [
+      {
+        "name": "💎 Frozen Totem",
+        "badge": "Totem · Crafted",
+        "description": "A Totem of Undying frozen at the heart of the deep. It saves you from death like any totem, but when it does, it answers with a blast of ice. It is also the key to claiming the Frozen Staff.",
+        "crafting": {
+          "grid": [
+            "blue_ice",
+            "blue_ice",
+            "blue_ice",
+            "blue_ice",
+            "totem_of_undying",
+            "blue_ice",
+            "blue_ice",
+            "blue_ice",
+            "blue_ice"
+          ],
+          "result_name": "Frozen Totem",
+          "result_icon": "totem_of_undying"
+        },
+        "abilities": [
+          {
+            "name": "Second Chance",
+            "description": "Works exactly like a Totem of Undying: held in your main hand or offhand, it saves you from a killing blow and is consumed."
+          },
+          {
+            "name": "Frost Nova",
+            "description": "The instant it saves you, every enemy within 15 blocks is encased in ice for 10 seconds, and the ground flash-freezes outward around you (thaws after 20 seconds)."
+          },
+          {
+            "name": "The Ritual",
+            "description": "If you die holding it deep inside an Ocean Monument, the revival freezes and drains the entire monument and reveals the Frozen Staff. Only one staff can exist at a time."
+          }
+        ]
+      },
+      {
+        "name": "💨 Dash",
+        "badge": "Mobility · Limited Item",
+        "description": "A burst of bound wind in your hand — right-click and hurl yourself across the battlefield. Perfect for chasing, escaping, or crossing gaps.",
+        "info": "Limited item — previously available from the AFK Shop.",
+        "abilities": [
+          {
+            "name": "Dash",
+            "description": "Launches you about 10 blocks in the direction you're looking. Works in both your main hand and offhand."
+          },
+          {
+            "name": "Safe Landing",
+            "description": "For a few seconds after dashing, you take no fall damage so you can dash off heights freely."
+          }
+        ]
+      },
+      {
+        "name": "🛠️ Core Tools",
+        "badge": "Tool Set · 5 Tools",
+        "description": "A set of five tools forged from Heavy Cores and Breeze Rods. Each one supercharges a basic job — mining, digging, chopping, fighting — into something far stronger."
+      }
+    ]
+  },
+  "systems": {
+    "description": "Corrupted SMP is built on interconnected systems that create a deep, rewarding gameplay loop. Here's how everything ties together.",
+    "cards": [
+      {
+        "name": "Custom Items/Weapons",
+        "icon": "⚔️",
+        "color_class": "supreme",
+        "description": "A roster of unique, hand-built gear — each with its own abilities, identity, and way to obtain it. From the ice-wielding Frozen Staff to the plague-spreading Forsaken Trident. If it glows with a colored name, it's special."
+      },
+      {
+        "name": "Crates",
+        "icon": "📦",
+        "color_class": "corrupted",
+        "description": "Reward chests unlocked with keys — from the everyday AFK Crate to the high-end Corrupted Crate. Earn keys through AFK farming, KOTH, the Key-All event, or the store."
+      },
+      {
+        "name": "Relics",
+        "icon": "✨",
+        "color_class": "blessed",
+        "description": "Rare collectible artifacts granting powerful passive buffs and on-hit abilities — lifesteal, execution, time-warping dodges, and more. Use /relicrecipes in-game for crafting recipes."
+      },
+      {
+        "name": "Ranks",
+        "icon": "👑",
+        "color_class": "champion",
+        "description": "Exclusive kits, crate keys, command access, and cosmetics. Subscription ranks (Crimson → Blessed → Supreme → Corrupted) stack and reset each season. Special ranks earned through gameplay."
+      }
+    ]
+  }
+}
