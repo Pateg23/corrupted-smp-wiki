@@ -48,6 +48,8 @@ textarea{resize:vertical;min-height:50px}
 .craft-slot:hover{border-color:#9333ea}
 .craft-slot img{width:48px;height:48px;object-fit:contain}
 .craft-slot .ph{font-size:.6rem;color:#555}
+.craft-slot .clear-slot{position:absolute;top:-6px;right:-6px;width:18px;height:18px;border-radius:50%;background:#dc2626;color:#fff;border:none;font-size:11px;line-height:18px;text-align:center;cursor:pointer;display:none;padding:0;z-index:2}
+.craft-slot:hover .clear-slot{display:block}
 .add-btn{background:#1a1a25;border:1px dashed #2a2a3a;color:#94a3b8;padding:.45rem;border-radius:7px;cursor:pointer;font-size:.72rem;width:100%;margin-top:.4rem;font-family:inherit}
 .add-btn:hover{border-color:#9333ea;color:#c084fc}
 .tag{display:inline-flex;align-items:center;gap:.2rem;padding:.15rem .4rem;border-radius:4px;font-size:.65rem;margin:.15rem;background:#0d0d14;border:1px solid #1e1e2e;color:#94a3b8;cursor:pointer}
@@ -196,7 +198,7 @@ function weapCard(w,i){
   if(hasCraft){
     var slots=g.map(function(s,j){
       var click='pickImg(function(n){setCraft(\''+pre+'\','+j+',n)})';
-      if(s)return '<div class="craft-slot" onclick="'+click+'"><img src="/images/'+esc(s)+'.png" onerror="imgErr(this)"></div>';
+      if(s)return '<div class="craft-slot" onclick="'+click+'"><img src="/images/'+esc(s)+'.png" onerror="imgErr(this)"><button class="clear-slot" onclick="event.stopPropagation();'+pre+'.crafting.grid['+j+']=\'\';render()">✕</button></div>';
       return '<div class="craft-slot" onclick="'+click+'"><span class="ph">✕</span></div>';
     }).join('');
     craftHtml='<div class="craft-box"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.3rem"><span style="font-size:.7rem;color:#94a3b8;font-weight:600">Crafting Recipe (click to pick image)</span>'+
@@ -269,7 +271,7 @@ function itemCard(x,i){
   if(g){
     var slots=g.map(function(s,j){
       var click='pickImg(function(n){setCraft(\''+pre+'\','+j+',n)})';
-      if(s)return '<div class="craft-slot" onclick="'+click+'"><img src="/images/'+esc(s)+'.png" onerror="imgErr(this)"></div>';
+      if(s)return '<div class="craft-slot" onclick="'+click+'"><img src="/images/'+esc(s)+'.png" onerror="imgErr(this)"><button class="clear-slot" onclick="event.stopPropagation();'+pre+'.crafting.grid['+j+']=\'\';render()">✕</button></div>';
       return '<div class="craft-slot" onclick="'+click+'"><span class="ph">✕</span></div>';
     }).join('');
     craftHtml='<div class="craft-box"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.3rem"><span style="font-size:.7rem;color:#94a3b8;font-weight:600">Crafting Recipe</span>'+
