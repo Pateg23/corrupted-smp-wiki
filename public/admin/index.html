@@ -197,9 +197,8 @@ function weapCard(w,i){
   var craftHtml='';
   if(hasCraft){
     var slots=g.map(function(s,j){
-      var click='pickImg(function(n){setCraft(\''+pre+'\','+j+',n)})';
-      if(s)return '<div class="craft-slot" onclick="'+click+'"><img src="/images/'+esc(s)+'.png" onerror="imgErr(this)"><button class="clear-slot" onclick="event.stopPropagation();'+pre+'.crafting.grid['+j+']=\'\';render()">✕</button></div>';
-      return '<div class="craft-slot" onclick="'+click+'"><span class="ph">✕</span></div>';
+      if(s)return '<div class="craft-slot" onclick="craftPick(\''+pre+'\','+j+')"><img src="/images/'+esc(s)+'.png" onerror="imgErr(this)"><button class="clear-slot" onclick="event.stopPropagation();'+pre+'.crafting.grid['+j+']=\'\';render()">✕</button></div>';
+      return '<div class="craft-slot" onclick="craftPick(\''+pre+'\','+j+')"><span class="ph">✕</span></div>';
     }).join('');
     craftHtml='<div class="craft-box"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.3rem"><span style="font-size:.7rem;color:#94a3b8;font-weight:600">Crafting Recipe (click to pick image)</span>'+
       '<button class="btn btn-r btn-sm" onclick="'+pre+'.crafting=null;render()">Remove Recipe</button></div>'+
@@ -270,9 +269,8 @@ function itemCard(x,i){
   var craftHtml='';
   if(g){
     var slots=g.map(function(s,j){
-      var click='pickImg(function(n){setCraft(\''+pre+'\','+j+',n)})';
-      if(s)return '<div class="craft-slot" onclick="'+click+'"><img src="/images/'+esc(s)+'.png" onerror="imgErr(this)"><button class="clear-slot" onclick="event.stopPropagation();'+pre+'.crafting.grid['+j+']=\'\';render()">✕</button></div>';
-      return '<div class="craft-slot" onclick="'+click+'"><span class="ph">✕</span></div>';
+      if(s)return '<div class="craft-slot" onclick="craftPick(\''+pre+'\','+j+')"><img src="/images/'+esc(s)+'.png" onerror="imgErr(this)"><button class="clear-slot" onclick="event.stopPropagation();'+pre+'.crafting.grid['+j+']=\'\';render()">✕</button></div>';
+      return '<div class="craft-slot" onclick="craftPick(\''+pre+'\','+j+')"><span class="ph">✕</span></div>';
     }).join('');
     craftHtml='<div class="craft-box"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.3rem"><span style="font-size:.7rem;color:#94a3b8;font-weight:600">Crafting Recipe</span>'+
       '<button class="btn btn-r btn-sm" onclick="'+pre+'.crafting=null;render()">Remove</button></div>'+
@@ -365,6 +363,8 @@ function handleUpload(files){
 
 function delImg(name){if(!confirm('Delete '+name+'?'))return;apiCall('/api/images/'+name,{method:'DELETE'}).then(function(){IMGS=IMGS.filter(function(n){return n!==name});rImages(document.getElementById('content'));toast('Deleted','s')}).catch(function(e){toast(e.message,'e')})}
 
+function stripExt(n){return n.replace(/\.[^.]+$/,'')}
+function craftPick(pre,j){pickImg(function(n){setCraft(pre,j,stripExt(n))})}
 function pickImg(cb){
   var m=document.createElement('div');m.className='img-picker';m.id='imgPicker';
   var html=IMGS.map(function(n){return '<div class="img-opt" onclick="pickDone(\''+n+'\')"><img src="/images/'+n+'" loading="lazy"><div class="nm">'+n+'</div></div>'}).join('');
