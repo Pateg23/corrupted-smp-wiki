@@ -22,6 +22,7 @@ if [ "$(id -u)" -ne 0 ]; then
 fi
 
 # --- Install dependencies ---
+export DEBIAN_FRONTEND=noninteractive
 if ! command -v node &>/dev/null; then
   echo ">> Installing Node.js..."
   curl -fsSL https://deb.nodesource.com/setup_20.x | bash -
