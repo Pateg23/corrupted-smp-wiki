@@ -25,6 +25,7 @@ const CMS_PASSWORD = process.env.CMS_PASSWORD || 'changeme';
 const CLOUDFLARE_API_TOKEN = process.env.CLOUDFLARE_API_TOKEN || '';
 const CLOUDFLARE_ACCOUNT_ID = process.env.CLOUDFLARE_ACCOUNT_ID || '';
 const CLOUDFLARE_PROJECT_NAME = process.env.CLOUDFLARE_PROJECT_NAME || 'corrupted-smp';
+const GITHUB_TOKEN = process.env.GITHUB_TOKEN || '';
 
 [BACKUP_DIR, IMAGES_DIR].forEach(d => fs.mkdirSync(d, { recursive: true }));
 
@@ -180,7 +181,7 @@ app.post('/api/deploy', auth, (req, res) => {
   } catch (e) { res.status(500).json({ error: e.message, output: e.stdout ? e.stdout.slice(-500) : '' }); }
 });
 
-// === SAVE+GEN+DEPLOY (one-shot) ===
+// === PUBLISH: save + generate + deploy + git push ===
 app.post('/api/publish', auth, (req, res) => {
   let data = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
   if (!data.weapons || !data.ranks) return res.status(400).json({ error: 'Missing sections' });
@@ -191,6 +192,12 @@ app.post('/api/publish', auth, (req, res) => {
       const env = `CLOUDFLARE_API_TOKEN=${CLOUDFLARE_API_TOKEN} CLOUDFLARE_ACCOUNT_ID=${CLOUDFLARE_ACCOUNT_ID}`;
       execSync(`${env} wrangler pages deploy ${PUBLIC} --project-name=${CLOUDFLARE_PROJECT_NAME} --branch=main`, { timeout: 120000 });
     }
+    // Push content to GitHub so the repo is always up-to-date
+    try {
+      execSync(`git add public/content.json public/images/ public/index.html`, { cwd: __dirname });
+      execSync(`git diff --cached --quiet || git commit -m "Auto-save [$(date -u +%Y-%m-%dT%H:%M:%SZ)]"`, { cwd: __dirname });
+      execSync(`git push`, { cwd: __dirname });
+    } catch (gitErr) { /* git push may fail if no changes or token issues — non-critical */ }
     res.json({ success: true });
   } catch (e) { res.status(500).json({ error: e.message }); }
 });

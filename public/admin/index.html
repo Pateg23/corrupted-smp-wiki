@@ -86,8 +86,6 @@ textarea{resize:vertical;min-height:50px}
 <div class="topbar"><h1>⚔️ CMS</h1><div class="actions">
 <span id="statusBadge" class="badge">Offline</span>
 <button class="btn btn-g btn-sm" onclick="doSave()">💾 Save</button>
-<button class="btn btn-b btn-sm" onclick="doGenerate()">🔨 Generate</button>
-<button class="btn btn-o btn-sm" onclick="doDeploy()">🚀 Deploy</button>
 <button class="btn btn-p btn-sm" onclick="doPublish()">📢 Publish</button>
 <button class="btn btn-a btn-sm" onclick="showBackups()">📋 Backups</button>
 <button class="btn btn-a btn-sm" onclick="window.open('/','_blank')">👁️ Preview</button>
@@ -205,7 +203,7 @@ function weapCard(w,i){
       '<div class="craft-grid">'+slots+'</div>'+
       '<div class="g2" style="margin-top:.4rem;max-width:400px">'+
       '<div class="fg"><label>Result Name</label><input value="'+esc(resName)+'" onchange="'+pre+'.crafting.result_name=this.value"></div>'+
-      '<div class="fg"><label>Result Image</label><div style="display:flex;gap:.3rem"><input value="'+esc(resIcon)+'" onchange="'+pre+'.crafting.result_icon=this.value" style="flex:1" id="cri'+i+'"><button class="btn btn-a btn-sm" onclick="pickImg(function(n){document.getElementById(\'cri'+i+'\').value=n})">Pick</button></div></div></div></div>';
+      '<div class="fg"><label>Result Image</label><div style="display:flex;gap:.3rem"><input value="'+esc(resIcon)+'" onchange="'+pre+'.crafting.result_icon=this.value" style="flex:1" id="cri'+i+'"><button class="btn btn-a btn-sm" onclick="pickImg(function(n){document.getElementById(\'cri'+i+'\').value=stripExt(n)})">Pick</button></div></div></div></div>';
   }else{
     craftHtml='<div class="craft-box"><button class="btn btn-a btn-sm" onclick="'+pre+'.crafting={grid:Array(9).fill(\'\'),result_name:\'\',result_icon:\'\'};render()">+ Add Recipe</button></div>';
   }
@@ -277,7 +275,7 @@ function itemCard(x,i){
       '<div class="craft-grid">'+slots+'</div>'+
       '<div class="g2" style="margin-top:.4rem;max-width:400px">'+
       '<div class="fg"><label>Result Name</label><input value="'+esc(x.crafting.result_name||'')+'" onchange="'+pre+'.crafting.result_name=this.value"></div>'+
-      '<div class="fg"><label>Result Image</label><div style="display:flex;gap:.3rem"><input value="'+esc(x.crafting.result_icon||'')+'" onchange="'+pre+'.crafting.result_icon=this.value" style="flex:1" id="iri'+i+'"><button class="btn btn-a btn-sm" onclick="pickImg(function(n){document.getElementById(\'iri'+i+'\').value=n})">Pick</button></div></div></div></div>';
+      '<div class="fg"><label>Result Image</label><div style="display:flex;gap:.3rem"><input value="'+esc(x.crafting.result_icon||'')+'" onchange="'+pre+'.crafting.result_icon=this.value" style="flex:1" id="iri'+i+'"><button class="btn btn-a btn-sm" onclick="pickImg(function(n){document.getElementById(\'iri'+i+'\').value=stripExt(n)})">Pick</button></div></div></div></div>';
   }else{
     craftHtml='<button class="btn btn-a btn-sm" onclick="'+pre+'.crafting={grid:Array(9).fill(\'\'),result_name:\'\',result_icon:\'\'};render()">+ Add Recipe</button>';
   }

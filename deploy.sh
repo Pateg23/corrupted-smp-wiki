@@ -56,6 +56,15 @@ if [ ! -f .env ] && [ -f .env.b64 ]; then
   echo ">> .env restored with credentials"
 fi
 
+# --- Configure git remote with token so publish can push ---
+GITHUB_TOKEN=$(grep -oP '^GITHUB_TOKEN=\K.*' .env 2>/dev/null || true)
+if [ -n "$GITHUB_TOKEN" ]; then
+  git remote set-url origin "https://Pateg23:$GITHUB_TOKEN@github.com/Pateg23/corrupted-smp-wiki.git"
+  git config user.email "cms@corrupted-smp"
+  git config user.name "CMS Bot"
+  echo ">> Git remote configured for auto-push"
+fi
+
 # --- Setup systemd service ---
 echo ">> Setting up systemd service..."
 cat > /etc/systemd/system/$SERVER_SERVICE.service << SERVICEEOF
@@ -109,10 +118,8 @@ echo -e "  ${CYAN}Wiki Page (VPS):${NC} http://$SERVER_IP:$PORT/"
 echo -e "  ${CYAN}Wiki Page (CDN):${NC} ${CF_URL}"
 echo ""
 echo -e "  ${CYAN}In the CMS, click:${NC}"
-echo -e "    💾 Save     → saves content"
-echo -e "    🔨 Generate → rebuilds wiki HTML"
-echo -e "    🚀 Deploy   → pushes to Cloudflare edge"
-echo -e "    📢 Publish  → does ALL THREE at once"
+echo -e "    💾 Save     → saves content locally"
+echo -e "    📢 Publish  → saves, generates, deploys to Cloudflare & pushes to GitHub"
 echo ""
 
 sleep 2
