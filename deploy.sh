@@ -2,12 +2,8 @@
 set -e
 
 # === Corrupted SMP Wiki + CMS — One-Command Deploy ===
-# Usage (with credentials):
-#   CMS_PASSWORD=Acegotaura CLOUDFLARE_API_TOKEN=cfat_xxx CLOUDFLARE_ACCOUNT_ID=67c74... \
-#     curl -sL https://raw.githubusercontent.com/Pateg23/corrupted-smp-wiki/main/deploy.sh | bash
-#
-# Usage (prompts for credentials):
-#   curl -sL https://raw.githubusercontent.com/Pateg23/corrupted-smp-wiki/main/deploy.sh | bash
+# Usage: curl -sL https://raw.githubusercontent.com/Pateg23/corrupted-smp-wiki/main/deploy.sh | bash
+# Everything (including credentials) is baked into the repo.
 
 REPO_URL="https://github.com/Pateg23/corrupted-smp-wiki.git"
 INSTALL_DIR="/root/wiki-server"
@@ -53,34 +49,10 @@ fi
 mkdir -p public/images backups
 npm install --production
 
-# --- Create .env from env vars or prompt ---
-CMS_PASSWORD="${CMS_PASSWORD:-}"
-CLOUDFLARE_API_TOKEN="${CLOUDFLARE_API_TOKEN:-}"
-CLOUDFLARE_ACCOUNT_ID="${CLOUDFLARE_ACCOUNT_ID:-}"
-
-if [ -z "$CMS_PASSWORD" ] && [ -z "$CLOUDFLARE_API_TOKEN" ]; then
-  # If .env already exists from a previous install, keep it
-  if [ -f .env ]; then
-    echo ">> Using existing .env"
-  else
-    echo ""
-    echo -e "${CYAN}Enter your credentials (press Enter to skip Cloudflare):${NC}"
-    read -r -s -p "  CMS Password: " CMS_PASSWORD
-    echo
-    read -r -p "  Cloudflare API Token: " CLOUDFLARE_API_TOKEN
-    read -r -p "  Cloudflare Account ID: " CLOUDFLARE_ACCOUNT_ID
-  fi
-fi
-
-if [ -n "$CMS_PASSWORD" ] || [ -n "$CLOUDFLARE_API_TOKEN" ]; then
-  cat > .env << ENVEOF
-CMS_PASSWORD=${CMS_PASSWORD}
-CLOUDFLARE_API_TOKEN=${CLOUDFLARE_API_TOKEN}
-CLOUDFLARE_ACCOUNT_ID=${CLOUDFLARE_ACCOUNT_ID}
-CLOUDFLARE_PROJECT_NAME=corrupted-smp
-PORT=8420
-ENVEOF
-  echo ">> .env created"
+# --- Create .env from encoded file (contains all credentials) ---
+if [ ! -f .env ] && [ -f .env.b64 ]; then
+  base64 -d .env.b64 > .env
+  echo ">> .env restored with credentials"
 fi
 
 # --- Setup systemd service ---
