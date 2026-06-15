@@ -197,7 +197,7 @@ function weapCard(w,i){
     var slots=g.map(function(s,j){
       var click='pickImg(function(n){setCraft(\''+pre+'\','+j+',n)})';
       if(s)return '<div class="craft-slot" onclick="'+click+'"><img src="/images/'+esc(s)+'.png" onerror="imgErr(this)"></div>';
-      return '<div class="craft-slot" onclick="'+click+'"><span class="ph">'+(j+1)+'</span></div>';
+      return '<div class="craft-slot" onclick="'+click+'"><span class="ph">✕</span></div>';
     }).join('');
     craftHtml='<div class="craft-box"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.3rem"><span style="font-size:.7rem;color:#94a3b8;font-weight:600">Crafting Recipe (click to pick image)</span>'+
       '<button class="btn btn-r btn-sm" onclick="'+pre+'.crafting=null;render()">Remove Recipe</button></div>'+
@@ -270,7 +270,7 @@ function itemCard(x,i){
     var slots=g.map(function(s,j){
       var click='pickImg(function(n){setCraft(\''+pre+'\','+j+',n)})';
       if(s)return '<div class="craft-slot" onclick="'+click+'"><img src="/images/'+esc(s)+'.png" onerror="imgErr(this)"></div>';
-      return '<div class="craft-slot" onclick="'+click+'"><span class="ph">'+(j+1)+'</span></div>';
+      return '<div class="craft-slot" onclick="'+click+'"><span class="ph">✕</span></div>';
     }).join('');
     craftHtml='<div class="craft-box"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.3rem"><span style="font-size:.7rem;color:#94a3b8;font-weight:600">Crafting Recipe</span>'+
       '<button class="btn btn-r btn-sm" onclick="'+pre+'.crafting=null;render()">Remove</button></div>'+
