@@ -79,21 +79,39 @@ systemctl daemon-reload
 systemctl enable $SERVER_SERVICE
 systemctl restart $SERVER_SERVICE
 
-# --- Show info ---
+# --- Generate wiki HTML and deploy to Cloudflare ---
+echo ">> Generating wiki HTML..."
+cd "$INSTALL_DIR"
+python3 generate.py public/content.json wiki-template.html public/index.html 2>/dev/null || true
+
+echo ">> Deploying to Cloudflare Pages..."
+CF_PROJECT=$(grep -oP '^CLOUDFLARE_PROJECT_NAME=\K.*' .env 2>/dev/null || echo "corrupted-smp")
+if command -v wrangler &>/dev/null && [ -f .env ]; then
+  export CLOUDFLARE_API_TOKEN=$(grep -oP '^CLOUDFLARE_API_TOKEN=\K.*' .env 2>/dev/null || true)
+  export CLOUDFLARE_ACCOUNT_ID=$(grep -oP '^CLOUDFLARE_ACCOUNT_ID=\K.*' .env 2>/dev/null || true)
+  if [ -n "$CLOUDFLARE_API_TOKEN" ] && [ -n "$CLOUDFLARE_ACCOUNT_ID" ]; then
+    wrangler pages deploy public --project-name="$CF_PROJECT" --branch=main 2>&1 | tail -3 || echo "  (Cloudflare deploy skipped — will work from CMS)"
+  fi
+fi
+
+# --- Get IPs and URLs ---
 SERVER_IP=$(curl -4 -s ifconfig.me 2>/dev/null || hostname -I | awk '{print $1}')
 PORT=$(grep -oP '^PORT=\K.*' .env 2>/dev/null || echo "8420")
-CF_PROJECT=$(grep -oP '^CLOUDFLARE_PROJECT_NAME=\K.*' .env 2>/dev/null || echo "corrupted-smp")
-
+CF_URL="https://${CF_PROJECT}.pages.dev"
 echo ""
 echo -e "${GREEN}╔══════════════════════════════════════════╗${NC}"
 echo -e "${GREEN}║  ✅ INSTALLATION COMPLETE!              ║${NC}"
 echo -e "${GREEN}╚══════════════════════════════════════════╝${NC}"
 echo ""
-echo -e "  ${CYAN}CMS Editor:${NC}    http://$SERVER_IP:$PORT/admin/"
-echo -e "  ${CYAN}Wiki Page:${NC}     http://$SERVER_IP:$PORT/"
-echo -e "  ${CYAN}API Content:${NC}  http://$SERVER_IP:$PORT/api/content"
+echo -e "  ${CYAN}CMS Editor:${NC}     http://$SERVER_IP:$PORT/admin/"
+echo -e "  ${CYAN}Wiki Page (VPS):${NC} http://$SERVER_IP:$PORT/"
+echo -e "  ${CYAN}Wiki Page (CDN):${NC} ${CF_URL}"
 echo ""
-echo -e "  ${CYAN}Cloudflare:${NC}    https://${CF_PROJECT}.pages.dev"
+echo -e "  ${CYAN}In the CMS, click:${NC}"
+echo -e "    💾 Save     → saves content"
+echo -e "    🔨 Generate → rebuilds wiki HTML"
+echo -e "    🚀 Deploy   → pushes to Cloudflare edge"
+echo -e "    📢 Publish  → does ALL THREE at once"
 echo ""
 
 sleep 2

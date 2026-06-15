@@ -19,7 +19,7 @@ textarea{resize:vertical;min-height:50px}
 .btn{padding:.5rem .9rem;border:none;border-radius:7px;font-size:.75rem;font-weight:600;cursor:pointer;font-family:inherit;transition:all .15s;display:inline-flex;align-items:center;gap:.35rem}
 .btn-p{background:linear-gradient(135deg,#9333ea,#7c3aed);color:#fff}.btn-p:hover{filter:brightness(1.15)}
 .btn-g{background:#059669;color:#fff}.btn-r{background:#dc2626;color:#fff}
-.btn-o{background:#d97706;color:#fff}.btn-b{background:#3b82f6;color:#fff}
+.btn-o{background:#d97706;color:#fff}.btn-b{background:#3b82f6;color:#fff}.btn-p{background:#7c3aed;color:#fff}
 .btn-a{background:#1a1a25;color:#94a3b8;border:1px solid #2a2a3a}.btn-a:hover{background:#2a2a3a;color:#e2e8f0}
 .btn-sm{padding:.3rem .55rem;font-size:.68rem}
 .topbar{background:#0e0e16;border-bottom:1px solid #1e1e2e;padding:.6rem 1rem;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100;flex-wrap:wrap;gap:.4rem}
@@ -86,6 +86,7 @@ textarea{resize:vertical;min-height:50px}
 <button class="btn btn-g btn-sm" onclick="doSave()">💾 Save</button>
 <button class="btn btn-b btn-sm" onclick="doGenerate()">🔨 Generate</button>
 <button class="btn btn-o btn-sm" onclick="doDeploy()">🚀 Deploy</button>
+<button class="btn btn-p btn-sm" onclick="doPublish()">📢 Publish</button>
 <button class="btn btn-a btn-sm" onclick="showBackups()">📋 Backups</button>
 <button class="btn btn-a btn-sm" onclick="window.open('/','_blank')">👁️ Preview</button>
 <button class="btn btn-a btn-sm" onclick="logout()">Logout</button>
@@ -408,6 +409,7 @@ function gatherDesc(){var e;if(sec==='ranks'){e=document.getElementById('rankDes
 function doSave(){gatherHero();gatherDesc();if(!C.hero||!C.hero.title){toast('Hero title is required!','e');return}setStatus('Saving...');apiCall('/api/save',{method:'POST',body:JSON.stringify(C)}).then(function(){setStatus('Saved!','ok');toast('Saved!','s')}).catch(function(e){setStatus('Error: '+e.message,'err');toast(e.message,'e')})}
 function doGenerate(){gatherHero();gatherDesc();setStatus('Generating...');apiCall('/api/generate',{method:'POST',body:'{}'}).then(function(r){setStatus('Generated! ('+Math.round(r.size/1024)+' KB)','ok');toast('Generated!','s')}).catch(function(e){setStatus('Error: '+e.message,'err');toast(e.message,'e')})}
 function doDeploy(){if(!confirm('Deploy to Cloudflare?'))return;gatherHero();gatherDesc();setStatus('Deploying...');apiCall('/api/deploy',{method:'POST',body:'{}'}).then(function(){setStatus('Deployed!','ok');toast('Deployed!','s')}).catch(function(e){setStatus('Deploy failed: '+e.message,'err');toast(e.message,'e')})}
+function doPublish(){if(!confirm('Save, generate & deploy to Cloudflare?'))return;gatherHero();gatherDesc();if(!C.hero||!C.hero.title){toast('Hero title is required!','e');return}setStatus('Publishing...');apiCall('/api/publish',{method:'POST',body:JSON.stringify(C)}).then(function(){setStatus('Published!','ok');toast('Published!','s')}).catch(function(e){setStatus('Publish failed: '+e.message,'err');toast(e.message,'e')})}
 function showBackups(){apiCall('/api/backups').then(function(b){var m=document.createElement('div');m.className='modal-overlay';var bHtml=b.length?b.map(function(x){return '<div style="display:flex;justify-content:space-between;align-items:center;padding:.4rem;margin:.25rem 0;background:#0d0d14;border:1px solid #1e1e2e;border-radius:7px"><span style="font-size:.72rem;color:#94a3b8">'+x+'</span><button class="btn btn-a btn-sm" onclick="doRestore(\''+x+'\',this)">Restore</button></div>'}).join(''):'<p style="color:#6b7280">No backups yet.</p>';m.innerHTML='<div class="modal"><h3>📋 Backups</h3>'+bHtml+'<div class="modal-acts"><button class="btn btn-a" onclick="this.closest(\'.modal-overlay\').remove()">Close</button></div></div>';document.body.appendChild(m)}).catch(function(e){toast(e.message,'e')})}
 function doRestore(fn,btn){if(!confirm('Restore '+fn+'?'))return;apiCall('/api/restore',{method:'POST',body:JSON.stringify({filename:fn})}).then(function(){return apiCall('/api/content')}).then(function(d){C=d;render();btn.closest('.modal-overlay').remove();toast('Restored!','s')}).catch(function(e){toast(e.message,'e')})}
 function sw(s,btn){sec=s;document.querySelectorAll('.sidebar button').forEach(function(b){b.classList.remove('active')});btn.classList.add('active');render()}
