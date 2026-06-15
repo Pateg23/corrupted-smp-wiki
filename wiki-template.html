@@ -1967,7 +1967,7 @@
   });
 </script>
 <script>
-function imgErr(el){var i=parseInt(el.dataset.extIndex||0);var fb=['.png','.jpg','.svg'];i++;if(i>=fb.length){el.style.display='none';return}el.dataset.extIndex=i;var b=el.src.replace(/\.[^.]+$/,'');el.src=b+fb[i]}
+function imgErr(el){var i=parseInt(el.dataset.extIndex||0);var fb=['.png','.jpg','.svg','.gif','.webp'];i++;if(i>=fb.length){el.style.display='none';return}el.dataset.extIndex=i;var b=el.src.replace(/\.[^.]+$/,'');el.src=b+fb[i]}
 </script>
 </body>
 </html>

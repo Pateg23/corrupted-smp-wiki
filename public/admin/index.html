@@ -203,7 +203,7 @@ function weapCard(w,i){
       '<div class="craft-grid">'+slots+'</div>'+
       '<div class="g2" style="margin-top:.4rem;max-width:400px">'+
       '<div class="fg"><label>Result Name</label><input value="'+esc(resName)+'" onchange="'+pre+'.crafting.result_name=this.value"></div>'+
-      '<div class="fg"><label>Result Image</label><div style="display:flex;gap:.3rem"><input value="'+esc(resIcon)+'" onchange="'+pre+'.crafting.result_icon=this.value" style="flex:1" id="cri'+i+'"><button class="btn btn-a btn-sm" onclick="pickImg(function(n){document.getElementById(\'cri'+i+'\').value=stripExt(n)})">Pick</button></div></div></div></div>';
+      '<div class="fg"><label>Result Image</label><div style="display:flex;gap:.3rem"><input value="'+esc(resIcon)+'" onchange="'+pre+'.crafting.result_icon=this.value" style="flex:1" id="cri'+i+'"><button class="btn btn-a btn-sm" onclick="pickImg(function(n){var e=document.getElementById(\'cri'+i+'\');e.value=stripExt(n);e.dispatchEvent(new Event(\'change\',{bubbles:true}))})">Pick</button></div></div></div></div>';
   }else{
     craftHtml='<div class="craft-box"><button class="btn btn-a btn-sm" onclick="'+pre+'.crafting={grid:Array(9).fill(\'\'),result_name:\'\',result_icon:\'\'};render()">+ Add Recipe</button></div>';
   }
@@ -275,7 +275,7 @@ function itemCard(x,i){
       '<div class="craft-grid">'+slots+'</div>'+
       '<div class="g2" style="margin-top:.4rem;max-width:400px">'+
       '<div class="fg"><label>Result Name</label><input value="'+esc(x.crafting.result_name||'')+'" onchange="'+pre+'.crafting.result_name=this.value"></div>'+
-      '<div class="fg"><label>Result Image</label><div style="display:flex;gap:.3rem"><input value="'+esc(x.crafting.result_icon||'')+'" onchange="'+pre+'.crafting.result_icon=this.value" style="flex:1" id="iri'+i+'"><button class="btn btn-a btn-sm" onclick="pickImg(function(n){document.getElementById(\'iri'+i+'\').value=stripExt(n)})">Pick</button></div></div></div></div>';
+      '<div class="fg"><label>Result Image</label><div style="display:flex;gap:.3rem"><input value="'+esc(x.crafting.result_icon||'')+'" onchange="'+pre+'.crafting.result_icon=this.value" style="flex:1" id="iri'+i+'"><button class="btn btn-a btn-sm" onclick="pickImg(function(n){var e=document.getElementById(\'iri'+i+'\');e.value=stripExt(n);e.dispatchEvent(new Event(\'change\',{bubbles:true}))})">Pick</button></div></div></div></div>';
   }else{
     craftHtml='<button class="btn btn-a btn-sm" onclick="'+pre+'.crafting={grid:Array(9).fill(\'\'),result_name:\'\',result_icon:\'\'};render()">+ Add Recipe</button>';
   }
@@ -370,7 +370,7 @@ function pickImg(cb){
   m._cb=cb;document.body.appendChild(m);
 }
 function pickDone(name){var m=document.getElementById('imgPicker');var cb=m?m._cb:null;if(m)m.remove();if(cb)cb(name)}
-function imgErr(el){var i=parseInt(el.dataset.extIndex||0);var fallbacks=['.png','.jpg','.svg'];i++;if(i>=fallbacks.length){el.style.display='none';return}el.dataset.extIndex=i;var base=el.src.replace(/\.[^.]+$/,'');el.src=base+fallbacks[i]}
+function imgErr(el){var i=parseInt(el.dataset.extIndex||0);var fallbacks=['.png','.jpg','.svg','.gif','.webp'];i++;if(i>=fallbacks.length){el.style.display='none';return}el.dataset.extIndex=i;var base=el.src.replace(/\.[^.]+$/,'');el.src=base+fallbacks[i]}
 
 // GENERIC ARRAY HELPERS
 function evalPath(p){var parts=p.split('.');var obj=C;for(var i=0;i<parts.length;i++){var key=parts[i].replace(/\[(\d+)\]/,'');var idx=parts[i].match(/\[(\d+)\]/);if(key==='C'&&i===0)continue;obj=obj[key];if(idx)obj=obj[parseInt(idx[1])]}return obj}
